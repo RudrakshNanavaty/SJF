@@ -1,5 +1,6 @@
 // MUI
-import { Box } from '@mui/material';
+import { RemoveCircleOutlineRounded } from '@mui/icons-material';
+import { TextField, IconButton, Paper } from '@mui/material';
 import {
 	Table,
 	TableBody,
@@ -7,71 +8,113 @@ import {
 	TableContainer,
 	TableHead,
 	TableRow,
-	Paper
 } from '@mui/material';
 
-const ProcessTable = () => {
+const ProcessTable = props => {
+	const { processes, setProcesses } = props;
 
-	const createData = (name, calories, fat, carbs, protein) => {
-		return { name, calories, fat, carbs, protein };
-	}
+	const arrivalTimeUpdate = (event, index) => {
+		const t = processes;
+		t[index]['at'] = event.target.value;
+		setProcesses(t);
+	};
 
-	const rows = [
-		createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-		createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-		createData('Eclair', 262, 16.0, 24, 6.0),
-		createData('Cupcake', 305, 3.7, 67, 4.3),
-		createData('Gingerbread', 356, 16.0, 49, 3.9),
-	];
+	const burstTimeUpdate = (event, index) => {
+		const t = processes;
+		t[index]['bt'] = event.target.value;
+		setProcesses(t);
+	};
+
+	const deleteProcess = (event, index) => {
+		const t = [
+			...processes.slice(0, index),
+			...processes.slice(index + 1, processes.length),
+		];
+		setProcesses(t);
+	};
 
 	return (
-		<Box
-			sx={{
-				p: '10%',
-				width: '100%',
-				height: '100%',
-			}}
-		>
-			<TableContainer component={Paper}>
-				<Table>
-					<TableHead>
-						<TableRow>
-							<TableCell>Dessert (100g serving)</TableCell>
-							<TableCell align='right'>Calories</TableCell>
-							<TableCell align='right'>Fat&nbsp;(g)</TableCell>
-							<TableCell align='right'>Carbs&nbsp;(g)</TableCell>
-							<TableCell align='right'>
-								Protein&nbsp;(g)
+		<TableContainer component={Paper} sx={{ borderRadius: '12px' }}>
+			<Table
+				sx={{
+					borderRadius: '12px',
+					backgroundColor: 'grey.900',
+				}}
+			>
+				{/* Table Header */}
+				<TableHead>
+					<TableRow>
+						<TableCell align='center'>PID</TableCell>
+						<TableCell align='center'>Arrival Time (AT)</TableCell>
+						<TableCell align='center'>Burst Time (BT)</TableCell>
+						<TableCell align='center'>
+							Completion Time (CT)
+						</TableCell>
+						<TableCell align='center'>
+							Turn around time (CT - AT)
+						</TableCell>
+					</TableRow>
+				</TableHead>
+
+				{/* Table Body */}
+				<TableBody>
+					{processes.map((process, i) => (
+						<TableRow
+							key={process.pid}
+							sx={{
+								'&:last-child td, &:last-child th': {
+									border: 0,
+								},
+							}}
+						>
+							{/* PID Cell */}
+							<TableCell>{process.pid}</TableCell>
+
+							{/* Arrival Time cell */}
+							<TableCell align='center'>
+								<TextField
+									size='small'
+									defaultValue={process.at}
+									onChange={e => arrivalTimeUpdate(e, i)}
+									inputProps={{
+										style: { textAlign: 'center' },
+									}}
+									error={process.at === ''}
+									helperText='Empty.'
+								/>
+							</TableCell>
+
+							{/* Burst Time cell */}
+							<TableCell align='center'>
+								<TextField
+									size='small'
+									defaultValue={process.bt}
+									onChange={e => burstTimeUpdate(e, i)}
+									inputProps={{
+										style: { textAlign: 'center' },
+									}}
+									error={process.bt === ''}
+									helperText='Empty.'
+								/>
+							</TableCell>
+
+							{/* Completion Time Cell */}
+							<TableCell align='center'>{process.ct}</TableCell>
+
+							{/* Turnaround Time Cell */}
+							<TableCell align='center'>{process.tat}</TableCell>
+
+							{/* Delete Row Button */}
+							<TableCell align='center'>
+								<IconButton onClick={e => deleteProcess(e, i)}>
+									<RemoveCircleOutlineRounded color='error' />
+								</IconButton>
 							</TableCell>
 						</TableRow>
-					</TableHead>
-					<TableBody>
-						{rows.map(row => (
-							<TableRow
-								key={row.name}
-								sx={{
-									'&:last-child td, &:last-child th': {
-										border: 0,
-									},
-								}}
-							>
-								<TableCell component='th' scope='row'>
-									{row.name}
-								</TableCell>
-								<TableCell align='right'>
-									{row.calories}
-								</TableCell>
-								<TableCell align='right'>{row.fat}</TableCell>
-								<TableCell align='right'>{row.carbs}</TableCell>
-								<TableCell align='right'>
-									{row.protein}
-								</TableCell>
-							</TableRow>
-						))}
-					</TableBody>
-				</Table>
-			</TableContainer>
-		</Box>
+					))}
+				</TableBody>
+			</Table>
+		</TableContainer>
 	);
 };
 

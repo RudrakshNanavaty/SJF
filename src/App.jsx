@@ -5,26 +5,22 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 // MUI
-import { Box, CssBaseline } from '@mui/material';
+import { CssBaseline } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 // local files
-import ProcessTable from './ProcessTable';
+import AppLayout from './layout/AppLayout';
 
 const App = () => {
-	const [themeMode, setThemeMode] = useState('dark');
-
 	const theme = createTheme({
 		palette: {
-			mode: themeMode,
+			mode: 'dark',
 		},
 	});
 
 	return (
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
-			<Box>
-				<ProcessTable />
-			</Box>
+			<AppLayout />
 		</ThemeProvider>
 	);
 };
