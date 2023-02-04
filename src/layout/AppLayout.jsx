@@ -8,28 +8,21 @@ const AppLayout = () => {
 		const pid = Math.floor(Math.random() * (999 - 101 + 1)) + 101;
 		return {
 			pid,
-			at: undefined,
-			bt: undefined,
-			ct: undefined,
-			tat: undefined,
+			arrivalTime: undefined,
+			burstTime: undefined,
+			completionTime: undefined,
+			turnAroundTime: undefined,
+			waitingTime: undefined,
+			responseTime: undefined,
 		};
 	};
 
 	// array of objects containing process data
 	const [processes, setProcesses] = useState([createData()]);
 
-	const addProcess = () => {
-		setProcesses([...processes, createData()]);
-	};
-
-	const calculateProcess = () => {
-		console.log(processes);
-	};
-
 	return (
 		<Grid
 			container
-			onSubmit={calculateProcess}
 			alignItems='flex-start'
 			justifyContent='center'
 			sx={{
@@ -42,6 +35,7 @@ const AppLayout = () => {
 		>
 			<Grid
 				item
+				container
 				sx={{
 					width: '100%',
 					height: '75vh',
@@ -53,22 +47,6 @@ const AppLayout = () => {
 					processes={processes}
 					setProcesses={setProcesses}
 				/>
-			</Grid>
-			<Grid item>
-				<Button
-					onClick={addProcess}
-					variant='contained'
-					sx={{ m: '20px' }}
-				>
-					ADD PROCESS
-				</Button>
-				<Button
-					variant='contained'
-					onClick={calculateProcess}
-					sx={{ m: '20px' }}
-				>
-					CALCULATE
-				</Button>
 			</Grid>
 		</Grid>
 	);
