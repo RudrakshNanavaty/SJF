@@ -1,24 +1,73 @@
 import { useState } from 'react';
 import ProcessTable from '../ProcessTable';
-import { Grid, Button } from '@mui/material';
+import {
+	Grid,
+	Button,
+	Alert,
+	IconButton,
+	AlertTitle,
+	Zoom,
+} from '@mui/material';
+import { CloseRounded } from '@mui/icons-material';
 
 const AppLayout = () => {
+	const [errorText, setErrorText] = useState([['', '']]);
+
 	const createData = () => {
 		// generate a random PID between 0 - 100
 		const pid = Math.floor(Math.random() * (999 - 101 + 1)) + 101;
+
 		return {
 			pid,
-			arrivalTime: undefined,
-			burstTime: undefined,
-			completionTime: undefined,
-			turnAroundTime: undefined,
-			waitingTime: undefined,
-			responseTime: undefined,
+			arrivalTime: '',
+			burstTime: '',
+			completionTime: '',
+			turnAroundTime: '',
+			waitingTime: '',
+			responseTime: '',
 		};
 	};
 
 	// array of objects containing process data
 	const [processes, setProcesses] = useState([createData()]);
+	const [alertOpen, setAlertOpen] = useState(false);
+
+	const modalClose = () => setAlertOpen(false);
+
+	const addProcess = () => {
+		setErrorText([...errorText, ['', '']]);
+		setProcesses([...processes, createData()]);
+	};
+
+	const calculateProcess = () => {
+		let error = false;
+
+		processes.forEach((process, index) => {
+			if (process.arrivalTime === '') {
+				const t = errorText;
+				t[index][0] = 'Empty';
+				setErrorText(t);
+				error = true;
+			} else {
+				const t = errorText;
+				t[index][0] = '';
+				setErrorText(t);
+			}
+
+			if (process.burstTime === '') {
+				const t = errorText;
+				t[index][1] = 'Empty';
+				setErrorText(t);
+				error = true;
+			} else {
+				const t = errorText;
+				t[index][1] = '';
+				setErrorText(t);
+			}
+		});
+
+		error ? setAlertOpen(true) : console.log(processes);
+	};
 
 	return (
 		<Grid
@@ -35,10 +84,9 @@ const AppLayout = () => {
 		>
 			<Grid
 				item
-				container
 				sx={{
 					width: '100%',
-					height: '75vh',
+					height: '85vh',
 					overflow: 'scroll',
 					'&::-webkit-scrollbar': { display: 'none' },
 				}}
@@ -46,7 +94,55 @@ const AppLayout = () => {
 				<ProcessTable
 					processes={processes}
 					setProcesses={setProcesses}
+					errorText={errorText}
+					setErrorText={setErrorText}
 				/>
+			</Grid>
+			<Grid item>
+				<Button
+					onClick={addProcess}
+					variant='contained'
+					sx={{ m: '20px' }}
+					disabled={alertOpen}
+				>
+					ADD PROCESS
+				</Button>
+				<Button
+					variant='contained'
+					onClick={calculateProcess}
+					sx={{ m: '20px' }}
+					disabled={alertOpen}
+				>
+					CALCULATE
+				</Button>
+			</Grid>
+			<Grid item>
+				<Zoom in={alertOpen}>
+					<Alert
+						variant='filled'
+						severity='error'
+						sx={{
+							m: '0',
+							width: '100vw - 4vh',
+							position: 'absolute',
+							left: '2vh',
+							right: '2vh',
+							bottom: '2vh',
+							zIndex: '9999',
+						}}
+						action={
+							<IconButton
+								color='inherit'
+								onClick={() => setAlertOpen(false)}
+							>
+								<CloseRounded />
+							</IconButton>
+						}
+					>
+						<AlertTitle>Error!</AlertTitle>
+						Please enter all the values.
+					</Alert>
+				</Zoom>
 			</Grid>
 		</Grid>
 	);
