@@ -1,6 +1,5 @@
 // MUI
 import { RemoveCircleOutlineRounded } from '@mui/icons-material';
-import { TextField, IconButton, Paper } from '@mui/material';
 import {
 	Table,
 	TableBody,
@@ -8,6 +7,9 @@ import {
 	TableContainer,
 	TableHead,
 	TableRow,
+	TextField,
+	IconButton,
+	Paper,
 } from '@mui/material';
 
 const ProcessTable = props => {
@@ -35,6 +37,8 @@ const ProcessTable = props => {
 			...processes.slice(0, index),
 			...processes.slice(index + 1, processes.length),
 		];
+
+		setErrorText(e);
 		setProcesses(t);
 	};
 

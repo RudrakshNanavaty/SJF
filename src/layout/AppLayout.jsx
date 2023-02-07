@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import ProcessTable from '../ProcessTable';
+// MUI
 import {
 	Grid,
 	Button,
@@ -9,12 +9,12 @@ import {
 	Zoom,
 } from '@mui/material';
 import { CloseRounded } from '@mui/icons-material';
+// local files
+import ProcessTable from '../components/ProcessTable';
 
 const AppLayout = () => {
-	const [errorText, setErrorText] = useState([['', '']]);
-
 	const createData = () => {
-		// generate a random PID between 0 - 100
+		// generate a random PID
 		const pid = Math.floor(Math.random() * (999 - 101 + 1)) + 101;
 
 		return {
@@ -28,11 +28,12 @@ const AppLayout = () => {
 		};
 	};
 
-	// array of objects containing process data
+	// list of objects containing process data
 	const [processes, setProcesses] = useState([createData()]);
+	// list of objects containing error data
+	const [errorText, setErrorText] = useState([['', '']]);
+	// control wether alert is open or not
 	const [alertOpen, setAlertOpen] = useState(false);
-
-	const modalClose = () => setAlertOpen(false);
 
 	const addProcess = () => {
 		setErrorText([...errorText, ['', '']]);
@@ -82,8 +83,11 @@ const AppLayout = () => {
 				'&::-webkit-scrollbar': { display: 'none' },
 			}}
 		>
+			{/* Table Component */}
 			<Grid
 				item
+				xs={12}
+				sm={10}
 				sx={{
 					width: '100%',
 					height: '85vh',
@@ -143,6 +147,9 @@ const AppLayout = () => {
 						Please enter all the values.
 					</Alert>
 				</Zoom>
+			</Grid>
+			<Grid item xs={12} sm={10}>
+				{/* Gantt Chart */}
 			</Grid>
 		</Grid>
 	);
