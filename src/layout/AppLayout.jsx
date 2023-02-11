@@ -1,6 +1,7 @@
 import { useState } from "react";
 import ProcessTable from "../ProcessTable";
 import { Grid, Button } from "@mui/material";
+import axios from "axios";
 
 const AppLayout = () => {
   const [pid, setPID] = useState(101);
@@ -28,66 +29,11 @@ const AppLayout = () => {
     setProcesses([...processes, createData()]);
   };
 
-  //   const calculateProcess = () => {
-  //     processes.forEach((process) => {
-  //       process.at = parseInt(process.at);
-  //       process.bt = parseInt(process.bt);
-  // 	  process.isCompleted = false;
-  //     });
-  //     processes.sort((p1, p2) => (p1.at > p2.at ? 1 : p1.at < p2.at ? -1 : 0));
-  //     let currentTime = 0;
-  //     processes.forEach((process) => {
-  //       process.waitingTime = currentTime - process.at;
-  //       process.responseTime = process.waitingTime;
-  //       currentTime += process.bt;
-  //       process.ct = currentTime;
-  //       process.tat = process.ct - process.at;
+  const calculateProcess = async () => {
+  const response =  await axios.post("http://localhost:3000/scheduling/sjf", {processes});
+  console.log(response);
+  console.log(response.data);
 
-  // 	});
-  //     console.log(processes);
-  //   };
-  const calculateProcess = () => {
-    processes.forEach((process) => {
-      process.at = parseInt(process.at);
-      process.bt = parseInt(process.bt);
-      process.isCompleted = false;
-    });
-    processes.sort((p1, p2) => (p1.at > p2.at ? 1 : p1.at < p2.at ? -1 : 0));
-    console.log("Before", processes);
-    let currentTime = processes[0].at;
-    for (let i = 0; i < processes.length; i++) {
-      console.log(currentTime);
-
-      let availableJobs = processes.filter(
-        (process) => process.at <= currentTime && process.isCompleted == false
-      );
-      let shortestJob = availableJobs.reduce(function (prev, curr) {
-        return prev.bt < curr.bt ? prev : curr;
-      });
-
-      shortestJob.waitingTime = currentTime - shortestJob.at;
-      shortestJob.responseTime = shortestJob.waitingTime;
-      currentTime += shortestJob.bt;
-      shortestJob.ct = currentTime;
-      shortestJob.tat = shortestJob.ct - shortestJob.at;
-      shortestJob.isCompleted = true;
-
-      processes[
-        processes.indexOf((process) => process.pid == shortestJob.pid)
-      ] = shortestJob;
-    }
-
-    function doWork(process) {
-      process.waitingTime = currentTime - process.at;
-      process.responseTime = process.waitingTime;
-      currentTime += process.bt;
-      process.ct = currentTime;
-      process.tat = process.ct - process.at;
-      process.isCompleted = true;
-      return process;
-    }
-
-    console.log(processes);
   };
 
   return (
