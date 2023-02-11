@@ -9,7 +9,7 @@ import {
 	TableRow,
 	TextField,
 	IconButton,
-	Paper,
+	Paper
 } from '@mui/material';
 
 const ProcessTable = props => {
@@ -30,12 +30,12 @@ const ProcessTable = props => {
 	const deleteProcess = (event, index) => {
 		const e = [
 			...errorText.slice(0, index),
-			...errorText.slice(index + 1, errorText.length),
+			...errorText.slice(index + 1, errorText.length)
 		];
 
 		const t = [
 			...processes.slice(0, index),
-			...processes.slice(index + 1, processes.length),
+			...processes.slice(index + 1, processes.length)
 		];
 
 		setErrorText(e);
@@ -43,11 +43,11 @@ const ProcessTable = props => {
 	};
 
 	return (
-		<TableContainer component={Paper} sx={{ borderRadius: '12px' }}>
+		<TableContainer component={Paper}>
 			<Table
 				sx={{
-					borderRadius: '12px',
-					backgroundColor: 'grey.900',
+					backdropFilter: 'blur(15px)',
+					borderRadius: '12px'
 				}}
 			>
 				{/* Table Header */}
@@ -81,8 +81,8 @@ const ProcessTable = props => {
 							key={process.pid}
 							sx={{
 								'&:last-child td, &:last-child th': {
-									border: 0,
-								},
+									border: 0
+								}
 							}}
 						>
 							{/* PID Cell */}
@@ -95,7 +95,7 @@ const ProcessTable = props => {
 									defaultValue={process.arrivalTime}
 									onChange={e => arrivalTimeUpdate(e, i)}
 									inputProps={{
-										style: { textAlign: 'center' },
+										style: { textAlign: 'center' }
 									}}
 									error={errorText[i][0] !== ''}
 									helperText={errorText[i][0]}
@@ -109,7 +109,7 @@ const ProcessTable = props => {
 									defaultValue={process.burstTime}
 									onChange={e => burstTimeUpdate(e, i)}
 									inputProps={{
-										style: { textAlign: 'center' },
+										style: { textAlign: 'center' }
 									}}
 									error={errorText[i][1] !== ''}
 									helperText={errorText[i][1]}

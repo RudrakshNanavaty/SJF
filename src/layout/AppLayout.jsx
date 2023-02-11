@@ -6,16 +6,17 @@ import {
 	Alert,
 	IconButton,
 	AlertTitle,
-	Zoom,
+	Zoom
 } from '@mui/material';
 import { CloseRounded } from '@mui/icons-material';
 // local files
 import ProcessTable from '../components/ProcessTable';
 
 const AppLayout = () => {
+	const [pid, setPID] = useState(101);
+
 	const createData = () => {
-		// generate a random PID
-		const pid = Math.floor(Math.random() * (999 - 101 + 1)) + 101;
+		setPID(pid + 1);
 
 		return {
 			pid,
@@ -24,15 +25,18 @@ const AppLayout = () => {
 			completionTime: '',
 			turnAroundTime: '',
 			waitingTime: '',
-			responseTime: '',
+			responseTime: ''
 		};
 	};
 
 	// list of objects containing process data
-	const [processes, setProcesses] = useState([createData()]);
+	const [processes, setProcesses] = useState(() => {
+		setPID(pid + 1);
+		return [createData()];
+	});
 	// list of objects containing error data
 	const [errorText, setErrorText] = useState([['', '']]);
-	// control wether alert is open or not
+	// control wether alert is open or not1
 	const [alertOpen, setAlertOpen] = useState(false);
 
 	const addProcess = () => {
@@ -67,7 +71,56 @@ const AppLayout = () => {
 			}
 		});
 
-		error ? setAlertOpen(true) : console.log(processes);
+		if (!error) {
+			processes.forEach(process => {
+				process.arrivalTime = parseInt(process.arrivalTime);
+				process.burstTime = parseInt(process.burstTime);
+				process.isCompleted = false;
+			});
+
+			processes.sort((p1, p2) =>
+				p1.arrivalTime > p2.arrivalTime
+					? 1
+					: p1.arrivalTime < p2.arrivalTime
+					? -1
+					: 0
+			);
+
+			let currentTime = processes[0].arrivalTime;
+
+			for (let i = 0; i < processes.length; i++) {
+				let availableJobs = processes.filter(
+					process =>
+						process.arrivalTime <= currentTime &&
+						process.isCompleted == false
+				);
+
+				let shortestJob = availableJobs.reduce(function (prev, curr) {
+					return prev.burstTime < curr.burstTime ? prev : curr;
+				});
+
+				shortestJob.waitingTime = currentTime - shortestJob.arrivalTime;
+
+				shortestJob.responseTime = shortestJob.waitingTime;
+
+				currentTime += shortestJob.burstTime;
+
+				shortestJob.completionTime = currentTime;
+
+				shortestJob.turnAroundTime =
+					shortestJob.completionTime - shortestJob.arrivalTime;
+
+				shortestJob.isCompleted = true;
+
+				processes[
+					processes.indexOf(process => process.pid == shortestJob.pid)
+				] = shortestJob;
+
+				setProcesses();
+			}
+		} else {
+			setAlertOpen(true);
+		}
 	};
 
 	return (
@@ -78,9 +131,8 @@ const AppLayout = () => {
 			sx={{
 				p: '2.5vh 2.5vw',
 				height: '100vh',
-				// enable scroll and hide scrollbar
 				overflow: 'scroll',
-				'&::-webkit-scrollbar': { display: 'none' },
+				'&::-webkit-scrollbar': { display: 'none' }
 			}}
 		>
 			{/* Table Component */}
@@ -91,8 +143,9 @@ const AppLayout = () => {
 				sx={{
 					width: '100%',
 					height: '85vh',
+					borderRadius: '12px',
 					overflow: 'scroll',
-					'&::-webkit-scrollbar': { display: 'none' },
+					'&::-webkit-scrollbar': { display: 'none' }
 				}}
 			>
 				<ProcessTable
@@ -102,6 +155,8 @@ const AppLayout = () => {
 					setErrorText={setErrorText}
 				/>
 			</Grid>
+
+			{/* Table action buttons */}
 			<Grid item>
 				<Button
 					onClick={addProcess}
@@ -120,7 +175,10 @@ const AppLayout = () => {
 					CALCULATE
 				</Button>
 			</Grid>
+
+			{/* Alert to display in case of error */}
 			<Grid item>
+				{/* Alert animation */}
 				<Zoom in={alertOpen}>
 					<Alert
 						variant='filled'
@@ -132,7 +190,7 @@ const AppLayout = () => {
 							left: '2vh',
 							right: '2vh',
 							bottom: '2vh',
-							zIndex: '9999',
+							zIndex: 'modal'
 						}}
 						action={
 							<IconButton

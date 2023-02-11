@@ -4,21 +4,34 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 // MUI
-import { CssBaseline } from '@mui/material';
+import { CssBaseline, Box } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 // local files
 import AppLayout from './layout/AppLayout';
+import assets from './assets';
 
 const App = () => {
-	const theme = createTheme({
-		palette: {
-			mode: 'dark',
-		},
-	});
-
 	return (
-		<ThemeProvider theme={theme}>
+		// custom theme
+		<ThemeProvider theme={createTheme(assets.theme)}>
 			<CssBaseline />
+
+			{/* Backgrounf Video */}
+			<Box
+				sx={{
+					position: 'absolute',
+					width: '100%',
+					zIndex: '-9',
+					overflow: 'scroll',
+					'&::-webkit-scrollbar': { display: 'none' }
+				}}
+			>
+				<video loop autoPlay muted>
+					<source src='bgvideo.mp4' type='video/mp4' />
+				</video>
+			</Box>
+
+			{/* Layout */}
 			<AppLayout />
 		</ThemeProvider>
 	);
