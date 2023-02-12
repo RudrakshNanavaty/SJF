@@ -16,7 +16,7 @@ const App = () => {
 		<ThemeProvider theme={createTheme(assets.theme)}>
 			<CssBaseline />
 
-			{/* Backgrounf Video */}
+			{/* Background Video */}
 			<Box
 				sx={{
 					position: 'absolute',

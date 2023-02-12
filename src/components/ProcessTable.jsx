@@ -44,7 +44,14 @@ const ProcessTable = props => {
 	};
 
 	return (
-		<TableContainer component={Paper}>
+		<TableContainer
+			component={Paper}
+			sx={{
+				overflow: 'scroll',
+				overscrollBehavior: 'contain',
+				'&::-webkit-scrollbar': { display: 'none' }
+			}}
+		>
 			<Table
 				sx={{
 					backdropFilter: 'blur(15px)',
@@ -71,7 +78,7 @@ const ProcessTable = props => {
 
 						<TableCell align='center'>ResponseTime</TableCell>
 
-						<TableCell align='center' />
+						<TableCell />
 					</TableRow>
 				</TableHead>
 

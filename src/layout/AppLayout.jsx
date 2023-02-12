@@ -8,13 +8,14 @@ import {
 	IconButton,
 	AlertTitle,
 	Zoom,
+	Grow,
 	Box,
-	Typography,
-	Grow
+	Typography
 } from '@mui/material';
 import { CloseRounded } from '@mui/icons-material';
 // local files
 import ProcessTable from '../components/ProcessTable';
+import GanttChart from '../components/GanttChart';
 
 const AppLayout = () => {
 	const [pid, setPID] = useState(101);
@@ -106,6 +107,17 @@ const AppLayout = () => {
 				'&::-webkit-scrollbar': { display: 'none' }
 			}}
 		>
+			<Grow in timeout={500}>
+				<Grid item>
+					<Typography
+						variant='h4'
+						sx={{ p: '10px', fontWeight: 'bold' }}
+					>
+						Shortest Job First Simulation
+					</Typography>
+				</Grid>
+			</Grow>
+
 			{/* Table Component */}
 			<Grow in timeout={500}>
 				<Grid
@@ -114,7 +126,7 @@ const AppLayout = () => {
 					sm={10}
 					sx={{
 						width: '100%',
-						height: '85vh',
+						height: '75vh',
 						borderRadius: '12px',
 						overflow: 'scroll',
 						overscrollBehavior: 'contain',
@@ -189,13 +201,16 @@ const AppLayout = () => {
 				xs={12}
 				sm={10}
 				sx={{
-					overflow: 'scroll',
+					width: '100%',
+					height: '85vh',
+					borderRadius: '12px',
+					overflowX: 'hidden',
+					overflowY: 'scroll',
+					overscrollBehavior: 'contain',
 					'&::-webkit-scrollbar': { display: 'none' }
 				}}
 			>
-				<Box>
-					<Typography>ABCDEFGHIJKLMNOPQRSTUVWXYZ</Typography>
-				</Box>
+				<GanttChart processes={processes} />
 			</Grid>
 		</Grid>
 	);
