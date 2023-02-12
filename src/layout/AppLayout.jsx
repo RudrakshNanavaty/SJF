@@ -9,7 +9,8 @@ import {
 	AlertTitle,
 	Zoom,
 	Box,
-	Typography
+	Typography,
+	Grow
 } from '@mui/material';
 import { CloseRounded } from '@mui/icons-material';
 // local files
@@ -106,44 +107,51 @@ const AppLayout = () => {
 			}}
 		>
 			{/* Table Component */}
-			<Grid
-				item
-				xs={12}
-				sm={10}
-				sx={{
-					width: '100%',
-					height: '85vh',
-					borderRadius: '12px',
-					overflow: 'scroll',
-					'&::-webkit-scrollbar': { display: 'none' }
-				}}
-			>
-				<ProcessTable
-					processes={processes}
-					setProcesses={setProcesses}
-					errorText={errorText}
-					setErrorText={setErrorText}
-				/>
-			</Grid>
+			<Grow in timeout={500}>
+				<Grid
+					item
+					xs={12}
+					sm={10}
+					sx={{
+						width: '100%',
+						height: '85vh',
+						borderRadius: '12px',
+						overflow: 'scroll',
+						overscrollBehavior: 'contain',
+						'&::-webkit-scrollbar': { display: 'none' }
+					}}
+				>
+					<ProcessTable
+						processes={processes}
+						setProcesses={setProcesses}
+						errorText={errorText}
+						setErrorText={setErrorText}
+					/>
+				</Grid>
+			</Grow>
 
 			{/* Table action buttons */}
 			<Grid item>
-				<Button
-					onClick={addProcess}
-					variant='contained'
-					sx={{ m: '20px' }}
-					disabled={alertOpen}
-				>
-					ADD PROCESS
-				</Button>
-				<Button
-					variant='contained'
-					onClick={calculateProcess}
-					sx={{ m: '20px' }}
-					disabled={alertOpen}
-				>
-					CALCULATE
-				</Button>
+				<Grow in timeout={500}>
+					<Button
+						onClick={addProcess}
+						variant='contained'
+						sx={{ m: '20px' }}
+						disabled={alertOpen}
+					>
+						ADD PROCESS
+					</Button>
+				</Grow>
+				<Grow in timeout={500}>
+					<Button
+						variant='contained'
+						onClick={calculateProcess}
+						sx={{ m: '20px' }}
+						disabled={alertOpen}
+					>
+						CALCULATE
+					</Button>
+				</Grow>
 			</Grid>
 
 			{/* Alert to display in case of error */}
@@ -176,7 +184,15 @@ const AppLayout = () => {
 					</Alert>
 				</Zoom>
 			</Grid>
-			<Grid item xs={12} sm={10}>
+			<Grid
+				item
+				xs={12}
+				sm={10}
+				sx={{
+					overflow: 'scroll',
+					'&::-webkit-scrollbar': { display: 'none' }
+				}}
+			>
 				<Box>
 					<Typography>ABCDEFGHIJKLMNOPQRSTUVWXYZ</Typography>
 				</Box>

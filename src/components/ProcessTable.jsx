@@ -9,7 +9,8 @@ import {
 	TableRow,
 	TextField,
 	IconButton,
-	Paper
+	Paper,
+	Grow
 } from '@mui/material';
 
 const ProcessTable = props => {
@@ -77,72 +78,76 @@ const ProcessTable = props => {
 				{/* Table Body */}
 				<TableBody>
 					{processes.map((process, i) => (
-						<TableRow
-							key={process.pid}
-							sx={{
-								'&:last-child td, &:last-child th': {
-									border: 0
-								}
-							}}
-						>
-							{/* PID Cell */}
-							<TableCell>{process.pid}</TableCell>
+						<Grow in timeout={500} key={process.pid}>
+							<TableRow
+								key={process.pid}
+								sx={{
+									'&:last-child td, &:last-child th': {
+										border: 0
+									}
+								}}
+							>
+								{/* PID Cell */}
+								<TableCell>{process.pid}</TableCell>
 
-							{/* Arrival Time Input */}
-							<TableCell align='center'>
-								<TextField
-									size='small'
-									defaultValue={process.arrivalTime}
-									onChange={e => arrivalTimeUpdate(e, i)}
-									inputProps={{
-										style: { textAlign: 'center' }
-									}}
-									error={errorText[i][0] !== ''}
-									helperText={errorText[i][0]}
-								/>
-							</TableCell>
+								{/* Arrival Time Input */}
+								<TableCell align='center'>
+									<TextField
+										size='small'
+										defaultValue={process.arrivalTime}
+										onChange={e => arrivalTimeUpdate(e, i)}
+										inputProps={{
+											style: { textAlign: 'center' }
+										}}
+										error={errorText[i][0] !== ''}
+										helperText={errorText[i][0]}
+									/>
+								</TableCell>
 
-							{/* Burst Time Input */}
-							<TableCell align='center'>
-								<TextField
-									size='small'
-									defaultValue={process.burstTime}
-									onChange={e => burstTimeUpdate(e, i)}
-									inputProps={{
-										style: { textAlign: 'center' }
-									}}
-									error={errorText[i][1] !== ''}
-									helperText={errorText[i][1]}
-								/>
-							</TableCell>
+								{/* Burst Time Input */}
+								<TableCell align='center'>
+									<TextField
+										size='small'
+										defaultValue={process.burstTime}
+										onChange={e => burstTimeUpdate(e, i)}
+										inputProps={{
+											style: { textAlign: 'center' }
+										}}
+										error={errorText[i][1] !== ''}
+										helperText={errorText[i][1]}
+									/>
+								</TableCell>
 
-							{/* Completion Time Cell */}
-							<TableCell align='center'>
-								{process.completionTime}
-							</TableCell>
+								{/* Completion Time Cell */}
+								<TableCell align='center'>
+									{process.completionTime}
+								</TableCell>
 
-							{/* Turnaround Time Cell */}
-							<TableCell align='center'>
-								{process.turnAroundTime}
-							</TableCell>
+								{/* Turnaround Time Cell */}
+								<TableCell align='center'>
+									{process.turnAroundTime}
+								</TableCell>
 
-							{/* Waiting Time Cell */}
-							<TableCell align='center'>
-								{process.waitingTime}
-							</TableCell>
+								{/* Waiting Time Cell */}
+								<TableCell align='center'>
+									{process.waitingTime}
+								</TableCell>
 
-							{/* Response Time Cell */}
-							<TableCell align='center'>
-								{process.completionTime}
-							</TableCell>
+								{/* Response Time Cell */}
+								<TableCell align='center'>
+									{process.responseTime}
+								</TableCell>
 
-							{/* Delete Row Button */}
-							<TableCell align='center'>
-								<IconButton onClick={e => deleteProcess(e, i)}>
-									<RemoveCircleOutlineRounded color='error' />
-								</IconButton>
-							</TableCell>
-						</TableRow>
+								{/* Delete Row Button */}
+								<TableCell align='center'>
+									<IconButton
+										onClick={e => deleteProcess(e, i)}
+									>
+										<RemoveCircleOutlineRounded color='error' />
+									</IconButton>
+								</TableCell>
+							</TableRow>
+						</Grow>
 					))}
 				</TableBody>
 			</Table>
