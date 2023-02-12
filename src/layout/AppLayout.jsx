@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import axios from 'axios';
 // MUI
 import {
 	Grid,
@@ -6,7 +7,9 @@ import {
 	Alert,
 	IconButton,
 	AlertTitle,
-	Zoom
+	Zoom,
+	Box,
+	Typography
 } from '@mui/material';
 import { CloseRounded } from '@mui/icons-material';
 // local files
@@ -44,9 +47,11 @@ const AppLayout = () => {
 		setProcesses([...processes, createData()]);
 	};
 
-	const calculateProcess = () => {
+	const calculateProcess = async () => {
+		// error flag
 		let error = false;
 
+		// setting error states and updating error flag
 		processes.forEach((process, index) => {
 			if (process.arrivalTime === '') {
 				const t = errorText;
@@ -71,56 +76,21 @@ const AppLayout = () => {
 			}
 		});
 
+		// fetch calculation data from backend if no error
 		if (!error) {
-			processes.forEach(process => {
-				process.arrivalTime = parseInt(process.arrivalTime);
-				process.burstTime = parseInt(process.burstTime);
-				process.isCompleted = false;
-			});
-
-			processes.sort((p1, p2) =>
-				p1.arrivalTime > p2.arrivalTime
-					? 1
-					: p1.arrivalTime < p2.arrivalTime
-					? -1
-					: 0
+			const axios_response = await axios.post(
+				'http://localhost:8000/scheduling/sjf',
+				{ processes }
 			);
 
-			let currentTime = processes[0].arrivalTime;
+			// update the 'processes' array with the data from API
+			setProcesses(axios_response.data.data.result);
 
-			for (let i = 0; i < processes.length; i++) {
-				let availableJobs = processes.filter(
-					process =>
-						process.arrivalTime <= currentTime &&
-						process.isCompleted == false
-				);
-
-				let shortestJob = availableJobs.reduce(function (prev, curr) {
-					return prev.burstTime < curr.burstTime ? prev : curr;
-				});
-
-				shortestJob.waitingTime = currentTime - shortestJob.arrivalTime;
-
-				shortestJob.responseTime = shortestJob.waitingTime;
-
-				currentTime += shortestJob.burstTime;
-
-				shortestJob.completionTime = currentTime;
-
-				shortestJob.turnAroundTime =
-					shortestJob.completionTime - shortestJob.arrivalTime;
-
-				shortestJob.isCompleted = true;
-
-				processes[
-					processes.indexOf(process => process.pid == shortestJob.pid)
-				] = shortestJob;
-
-				setProcesses();
-			}
-		} else {
-			setAlertOpen(true);
+			return;
 		}
+
+		// else display error
+		setAlertOpen(true);
 	};
 
 	return (
@@ -207,7 +177,9 @@ const AppLayout = () => {
 				</Zoom>
 			</Grid>
 			<Grid item xs={12} sm={10}>
-				{/* Gantt Chart */}
+				<Box>
+					<Typography>ABCDEFGHIJKLMNOPQRSTUVWXYZ</Typography>
+				</Box>
 			</Grid>
 		</Grid>
 	);
