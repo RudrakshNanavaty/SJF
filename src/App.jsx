@@ -21,7 +21,7 @@ const App = () => {
 				sx={{
 					position: 'absolute',
 					width: '100%',
-					zIndex: '-9',
+					zIndex: '-1',
 					overflow: 'scroll',
 					'&::-webkit-scrollbar': { display: 'none' }
 				}}

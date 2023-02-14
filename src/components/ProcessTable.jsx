@@ -14,7 +14,8 @@ import {
 } from '@mui/material';
 
 const ProcessTable = props => {
-	const { processes, setProcesses, errorText, setErrorText } = props;
+	const { processes, setProcesses, errorText, setErrorText, averages } =
+		props;
 
 	const arrivalTimeUpdate = (event, index) => {
 		const t = processes;
@@ -28,7 +29,7 @@ const ProcessTable = props => {
 		setProcesses(t);
 	};
 
-	const deleteProcess = (event, index) => {
+	const deleteProcess = index => {
 		const e = [
 			...errorText.slice(0, index),
 			...errorText.slice(index + 1, errorText.length)
@@ -46,6 +47,7 @@ const ProcessTable = props => {
 	return (
 		<TableContainer
 			component={Paper}
+			elevation={3}
 			sx={{
 				overflow: 'scroll',
 				overscrollBehavior: 'contain',
@@ -54,8 +56,7 @@ const ProcessTable = props => {
 		>
 			<Table
 				sx={{
-					backdropFilter: 'blur(15px)',
-					borderRadius: '12px'
+					backdropFilter: 'blur(15px)'
 				}}
 			>
 				{/* Table Header */}
@@ -147,15 +148,44 @@ const ProcessTable = props => {
 
 								{/* Delete Row Button */}
 								<TableCell align='center'>
-									<IconButton
-										onClick={e => deleteProcess(e, i)}
-									>
+									<IconButton onClick={e => deleteProcess(i)}>
 										<RemoveCircleOutlineRounded color='error' />
 									</IconButton>
 								</TableCell>
 							</TableRow>
 						</Grow>
 					))}
+
+					{/* Averages Row */}
+					<TableRow sx={{ border: 'none' }}>
+						<TableCell sx={{ border: 'none' }}>Averages</TableCell>
+						{/* First 2 don't require average calculation */}
+						<TableCell sx={{ border: 'none' }}></TableCell>
+						<TableCell sx={{ border: 'none' }}></TableCell>
+
+						{/* Avg. Completion Time */}
+						<TableCell align='center' sx={{ border: 'none' }}>
+							{averages.ct}
+						</TableCell>
+
+						{/* Avg. TAT Time */}
+						<TableCell align='center' sx={{ border: 'none' }}>
+							{averages.tat}
+						</TableCell>
+
+						{/* Avg. Waiting Time */}
+						<TableCell align='center' sx={{ border: 'none' }}>
+							{averages.wt}
+						</TableCell>
+
+						{/* Avg. Response Time */}
+						<TableCell align='center' sx={{ border: 'none' }}>
+							{averages.rt}
+						</TableCell>
+
+						{/* Delete Button empty cell */}
+						<TableCell sx={{ border: 'none' }}></TableCell>
+					</TableRow>
 				</TableBody>
 			</Table>
 		</TableContainer>

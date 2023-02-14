@@ -22,7 +22,6 @@ const GanttChart = props => {
 
 	return (
 		<TableContainer
-			component={Paper}
 			sx={{
 				overflow: 'scroll',
 				overscrollBehavior: 'contain',
@@ -30,27 +29,29 @@ const GanttChart = props => {
 			}}
 		>
 			<Table
+				component={Paper}
 				sx={{
-					backdropFilter: 'blur(15px)',
-					borderRadius: '12px'
+					backdropFilter: 'blur(15px)'
 				}}
 			>
 				<TableBody>
+					{/* PID Row */}
 					<TableRow
 						sx={{
 							'&:last-child td, &:last-child th': {
-								border: 0
+								border: 'none'
 							}
 						}}
 					>
-						<TableCell sx={{ width: '100px' }}>PID:</TableCell>
-						{ganttProcesses.map((process) => (
+						<TableCell sx={{ width: '100px' }}>PID</TableCell>
+						{ganttProcesses.map(process => (
 							<TableCell key={process.pid} align='center'>
 								{process.pid}
 							</TableCell>
 						))}
 					</TableRow>
 
+					{/* Time Row */}
 					<TableRow
 						sx={{
 							'&:last-child td, &:last-child th': {
@@ -58,7 +59,8 @@ const GanttChart = props => {
 							}
 						}}
 					>
-						<TableCell sx={{ width: '100px' }}>Time:</TableCell>
+						<TableCell sx={{ width: '100px' }}>Time</TableCell>
+						{/* First cell with flex */}
 						<TableCell align='right'>
 							<Box
 								sx={{

@@ -9,7 +9,6 @@ import {
 	AlertTitle,
 	Zoom,
 	Grow,
-	Box,
 	Typography
 } from '@mui/material';
 import { CloseRounded } from '@mui/icons-material';
@@ -39,6 +38,9 @@ const AppLayout = () => {
 		setPID(pid + 1);
 		return [createData()];
 	});
+
+	const [averages, setAverages] = useState({ ct: 0, tat: 0, wt: 0, rt: 0 });
+
 	// list of objects containing error data
 	const [errorText, setErrorText] = useState([['', '']]);
 	// control wether alert is open or not1
@@ -88,11 +90,41 @@ const AppLayout = () => {
 			// update the 'processes' array with the data from API
 			setProcesses(axios_response.data.data.result);
 
+			/**
+			 * TODO: Bakcend will send averages
+			 * setAverages(axios_response.data.data.averages);
+			 */
+
 			return;
 		}
 
 		// else display error
 		setAlertOpen(true);
+	};
+
+	const updateAverages = () => {
+		const l = processes.length;
+
+		const tempAvg = { ct: 0, tat: 0, wt: 0, rt: 0 };
+
+		processes.forEach(process => {
+			tempAvg['ct'] += parseFloat(
+				(process['completionTime'] / l).toPrecision(2)
+			);
+			tempAvg['tat'] += parseFloat(
+				(process['turnAroundTime'] / l).toPrecision(2)
+			);
+			tempAvg['wt'] += parseFloat(
+				(process['waitingTime'] / l).toPrecision(2)
+			);
+			tempAvg['rt'] += parseFloat(
+				(process['responseTime'] / l).toPrecision(2)
+			);
+		});
+
+		console.log();
+
+		setAverages(tempAvg);
 	};
 
 	return (
@@ -111,7 +143,11 @@ const AppLayout = () => {
 				<Grid item>
 					<Typography
 						variant='h4'
-						sx={{ p: '10px', fontWeight: 'bold' }}
+						sx={{
+							p: '10px',
+							fontWeight: 'bold',
+							textShadow: '1px 1px 5px #121212'
+						}}
 					>
 						Shortest Job First Simulation
 					</Typography>
@@ -127,7 +163,6 @@ const AppLayout = () => {
 					sx={{
 						width: '100%',
 						height: '75vh',
-						borderRadius: '12px',
 						overflow: 'scroll',
 						overscrollBehavior: 'contain',
 						'&::-webkit-scrollbar': { display: 'none' }
@@ -138,6 +173,7 @@ const AppLayout = () => {
 						setProcesses={setProcesses}
 						errorText={errorText}
 						setErrorText={setErrorText}
+						averages={averages}
 					/>
 				</Grid>
 			</Grow>
