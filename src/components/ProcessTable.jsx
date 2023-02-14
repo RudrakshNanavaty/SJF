@@ -165,22 +165,22 @@ const ProcessTable = props => {
 
 						{/* Avg. Completion Time */}
 						<TableCell align='center' sx={{ border: 'none' }}>
-							{averages.ct}
+							{averages.completionTime}
 						</TableCell>
 
 						{/* Avg. TAT Time */}
 						<TableCell align='center' sx={{ border: 'none' }}>
-							{averages.tat}
+							{averages.turnAroundTime}
 						</TableCell>
 
 						{/* Avg. Waiting Time */}
 						<TableCell align='center' sx={{ border: 'none' }}>
-							{averages.wt}
+							{averages.waitingTime}
 						</TableCell>
 
 						{/* Avg. Response Time */}
 						<TableCell align='center' sx={{ border: 'none' }}>
-							{averages.rt}
+							{averages.responseTime}
 						</TableCell>
 
 						{/* Delete Button empty cell */}

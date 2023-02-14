@@ -6,7 +6,7 @@ const assets = {
 		palette: {
 			mode: 'dark',
 			background: {
-				paper: '#121212bf'
+				paper: '#0097a75f'
 			},
 			primary: {
 				main: '#00ffff'
