@@ -138,7 +138,7 @@ const AppLayout = () => {
 					sm={10}
 					sx={{
 						width: '100%',
-						height: '75vh',
+						height: '78vh',
 						overflow: 'scroll',
 						overscrollBehavior: 'contain',
 						'&::-webkit-scrollbar': { display: 'none' }
